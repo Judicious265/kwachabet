@@ -1,0 +1,1910 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KWACHA Bet - Malawi's Premier Betting Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --kw-gold: #F5C518;
+    --kw-gold-dark: #C49A0E;
+    --kw-green: #00B37E;
+    --kw-green-dark: #007A55;
+    --kw-red: #E53935;
+    --kw-bg: #0A0E1A;
+    --kw-surface: #111827;
+    --kw-surface2: #1A2236;
+    --kw-surface3: #1F2D44;
+    --kw-border: rgba(245,197,24,0.15);
+    --kw-text: #F0F4FF;
+    --kw-muted: #8898BB;
+    --kw-live: #FF3D3D;
+    --kw-accent: #3B82F6;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--kw-bg);
+    color: var(--kw-text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SPLASH / AUTH SCREEN */
+  #splash {
+    position: fixed; inset: 0; z-index: 1000;
+    background: var(--kw-bg);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0;
+  }
+  .splash-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 20%, rgba(245,197,24,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 80%, rgba(0,179,126,0.08) 0%, transparent 50%);
+  }
+  .splash-logo {
+    position: relative;
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .splash-logo .brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #F5C518 0%, #FFE066 50%, #C49A0E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+  }
+  .splash-logo .brand-sub {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    letter-spacing: 8px;
+    color: var(--kw-muted);
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .splash-logo .brand-flag {
+    font-size: 28px;
+    margin-bottom: 8px;
+  }
+
+  /* AUTH TABS */
+  .auth-card {
+    position: relative;
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 16px;
+    padding: 32px;
+    width: 380px;
+    max-width: 95vw;
+  }
+  .auth-tabs {
+    display: flex;
+    background: var(--kw-surface2);
+    border-radius: 8px;
+    padding: 4px;
+    margin-bottom: 24px;
+    gap: 4px;
+  }
+  .auth-tab {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    color: var(--kw-muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .auth-tab.active {
+    background: var(--kw-gold);
+    color: #000;
+  }
+  .auth-panel { display: none; }
+  .auth-panel.active { display: block; }
+  .field-group { margin-bottom: 16px; }
+  .field-group label {
+    display: block;
+    font-size: 12px;
+    color: var(--kw-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 700;
+  }
+  .field-group input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--kw-surface2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--kw-text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field-group input:focus { border-color: var(--kw-gold); }
+  .field-group .hint {
+    font-size: 11px;
+    color: var(--kw-muted);
+    margin-top: 4px;
+  }
+  .pin-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  .pin-input {
+    width: 56px !important;
+    text-align: center;
+    font-size: 22px !important;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 13px;
+    background: var(--kw-gold);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-primary:hover { background: var(--kw-gold-dark); }
+  .btn-green {
+    background: var(--kw-green);
+    color: #fff;
+  }
+  .btn-green:hover { background: var(--kw-green-dark); }
+  .btn-outline {
+    width: 100%;
+    padding: 11px;
+    background: transparent;
+    border: 1px solid var(--kw-border);
+    border-radius: 8px;
+    color: var(--kw-muted);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+  }
+  .btn-outline:hover { border-color: var(--kw-gold); color: var(--kw-gold); }
+
+  /* MAIN APP */
+  #app { display: none; min-height: 100vh; flex-direction: column; }
+  #app.visible { display: flex; }
+
+  /* TOP NAV */
+  .topnav {
+    background: var(--kw-surface);
+    border-bottom: 1px solid var(--kw-border);
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    position: sticky; top: 0; z-index: 100;
+    gap: 16px;
+  }
+  .nav-brand {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 20px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #F5C518, #FFE066);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-link {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--kw-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    border: none;
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .nav-link:hover { color: var(--kw-text); background: var(--kw-surface2); }
+  .nav-link.active { color: var(--kw-gold); background: rgba(245,197,24,0.1); }
+  .nav-link .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--kw-live);
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .balance-chip {
+    background: rgba(245,197,24,0.12);
+    border: 1px solid rgba(245,197,24,0.3);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--kw-gold);
+    cursor: pointer;
+  }
+  .balance-chip span { font-size: 11px; opacity: 0.7; }
+  .avatar-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--kw-green), var(--kw-accent));
+    border: none;
+    cursor: pointer;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* MAIN CONTENT */
+  .main-content {
+    flex: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 20px 16px;
+  }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* HERO / HOME */
+  .hero-banner {
+    background: linear-gradient(135deg, var(--kw-surface) 0%, var(--kw-surface2) 100%);
+    border: 1px solid var(--kw-border);
+    border-radius: 16px;
+    padding: 28px 28px 24px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-banner::before {
+    content: '';
+    position: absolute;
+    right: -40px; top: -40px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(245,197,24,0.1) 0%, transparent 70%);
+  }
+  .hero-banner h1 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    color: var(--kw-gold);
+  }
+  .hero-banner p { color: var(--kw-muted); font-size: 15px; margin-bottom: 18px; }
+  .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+  .hero-btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .hero-btn.gold { background: var(--kw-gold); color: #000; }
+  .hero-btn.gold:hover { background: var(--kw-gold-dark); }
+  .hero-btn.ghost { background: transparent; border: 1px solid var(--kw-border); color: var(--kw-text); }
+  .hero-btn.ghost:hover { border-color: var(--kw-gold); color: var(--kw-gold); }
+
+  /* SPORT CATEGORIES */
+  .sport-cats {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-bottom: 20px;
+    padding-bottom: 4px;
+  }
+  .sport-cats::-webkit-scrollbar { display: none; }
+  .sport-cat {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    background: var(--kw-surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--kw-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 6px;
+    white-space: nowrap;
+  }
+  .sport-cat:hover { border-color: var(--kw-gold); color: var(--kw-gold); }
+  .sport-cat.active { background: var(--kw-gold); color: #000; border-color: var(--kw-gold); }
+  .sport-cat .icon { font-size: 16px; }
+
+  /* MATCH CARDS */
+  .section-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--kw-text);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title .badge {
+    background: var(--kw-gold);
+    color: #000;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+  }
+  .section-title .live-badge {
+    background: var(--kw-live);
+    color: #fff;
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 700;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .match-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .match-card {
+    background: var(--kw-surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .match-card:hover { border-color: rgba(245,197,24,0.3); background: var(--kw-surface2); }
+  .match-card.live-card { border-left: 3px solid var(--kw-live); }
+  .match-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .match-league {
+    font-size: 11px;
+    color: var(--kw-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .match-time {
+    font-size: 12px;
+    color: var(--kw-muted);
+    font-family: 'Rajdhani', sans-serif;
+  }
+  .match-time.live {
+    color: var(--kw-live);
+    font-weight: 700;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .match-teams {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .team-info { text-align: center; flex: 1; }
+  .team-info .team-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+  .team-info .team-score {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--kw-gold);
+  }
+  .vs-divider {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 12px;
+    color: var(--kw-muted);
+    font-weight: 600;
+  }
+  .odds-row {
+    display: flex;
+    gap: 6px;
+  }
+  .odd-btn {
+    flex: 1;
+    background: var(--kw-surface2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 8px;
+    padding: 8px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .odd-btn:hover { border-color: var(--kw-gold); background: rgba(245,197,24,0.08); }
+  .odd-btn.selected { background: rgba(245,197,24,0.15); border-color: var(--kw-gold); }
+  .odd-label { font-size: 10px; color: var(--kw-muted); font-weight: 600; text-transform: uppercase; }
+  .odd-val { font-family: 'Rajdhani', sans-serif; font-size: 16px; font-weight: 700; color: var(--kw-gold); }
+
+  /* BET SLIP */
+  .betslip-sidebar {
+    position: fixed;
+    right: 0; top: 60px; bottom: 0;
+    width: 300px;
+    background: var(--kw-surface);
+    border-left: 1px solid var(--kw-border);
+    display: flex; flex-direction: column;
+    z-index: 50;
+    transition: transform 0.3s;
+  }
+  .betslip-sidebar.hidden { transform: translateX(100%); }
+  .betslip-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--kw-border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .betslip-header h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .slip-count {
+    background: var(--kw-gold);
+    color: #000;
+    font-size: 11px;
+    font-weight: 800;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .betslip-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .slip-item {
+    background: var(--kw-surface2);
+    border-radius: 8px;
+    padding: 10px 12px;
+    position: relative;
+  }
+  .slip-item-teams { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .slip-item-pick {
+    font-size: 12px;
+    color: var(--kw-muted);
+    display: flex; justify-content: space-between;
+  }
+  .slip-item-pick .odd { color: var(--kw-gold); font-weight: 700; font-family: 'Rajdhani', sans-serif; }
+  .slip-remove {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: none; border: none;
+    color: var(--kw-muted);
+    cursor: pointer; font-size: 16px;
+  }
+  .betslip-footer { padding: 14px 16px; border-top: 1px solid var(--kw-border); }
+  .slip-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 8px;
+    color: var(--kw-muted);
+  }
+  .slip-row.total { color: var(--kw-text); font-weight: 700; font-size: 15px; }
+  .slip-stake-input {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--kw-surface2);
+    border: 1px solid rgba(245,197,24,0.3);
+    border-radius: 8px;
+    color: var(--kw-text);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    outline: none;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* FLOATING BET SLIP TOGGLE */
+  .betslip-fab {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    background: var(--kw-gold);
+    color: #000;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 20px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    z-index: 200;
+    display: flex; align-items: center; gap: 8px;
+    box-shadow: 0 4px 20px rgba(245,197,24,0.4);
+    transition: all 0.2s;
+  }
+  .betslip-fab:hover { background: var(--kw-gold-dark); }
+  .betslip-fab .fab-count {
+    background: #000;
+    color: var(--kw-gold);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* MY BETS */
+  .tab-group {
+    display: flex;
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 4px;
+    margin-bottom: 20px;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 9px;
+    border: none;
+    background: none;
+    border-radius: 7px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--kw-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab-btn.active { background: var(--kw-surface3); color: var(--kw-gold); }
+  .ticket-card {
+    background: var(--kw-surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .ticket-header {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    background: var(--kw-surface2);
+  }
+  .ticket-id { font-size: 12px; color: var(--kw-muted); font-family: 'Rajdhani', sans-serif; }
+  .ticket-status {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .ticket-status.open { background: rgba(59,130,246,0.15); color: #60A5FA; }
+  .ticket-status.won { background: rgba(0,179,126,0.15); color: var(--kw-green); }
+  .ticket-status.lost { background: rgba(229,57,53,0.15); color: var(--kw-red); }
+  .ticket-status.pending { background: rgba(245,197,24,0.15); color: var(--kw-gold); }
+  .ticket-legs { padding: 12px 16px; display: flex; flex-direction: column; gap: 8px; }
+  .ticket-leg {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .leg-info .leg-teams { font-weight: 600; margin-bottom: 2px; }
+  .leg-info .leg-pick { font-size: 12px; color: var(--kw-muted); }
+  .leg-odd {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--kw-gold);
+  }
+  .leg-result { font-size: 11px; }
+  .leg-result.win { color: var(--kw-green); }
+  .leg-result.loss { color: var(--kw-red); }
+  .leg-result.pending { color: var(--kw-muted); }
+  .ticket-footer {
+    padding: 10px 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .ticket-footer .stake { color: var(--kw-muted); }
+  .ticket-footer .payout { font-weight: 700; color: var(--kw-gold); }
+
+  /* WALLET */
+  .wallet-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .wallet-card {
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 14px;
+    padding: 20px;
+  }
+  .wallet-card .wc-label {
+    font-size: 12px;
+    color: var(--kw-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .wallet-card .wc-amount {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--kw-gold);
+  }
+  .wallet-card .wc-sub { font-size: 12px; color: var(--kw-muted); margin-top: 4px; }
+  .payment-methods {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .pay-method {
+    background: var(--kw-surface);
+    border: 2px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .pay-method:hover { border-color: var(--kw-gold); }
+  .pay-method.selected { border-color: var(--kw-gold); background: rgba(245,197,24,0.06); }
+  .pay-method .pm-icon { font-size: 28px; margin-bottom: 6px; }
+  .pay-method .pm-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+  .pay-method .pm-sub { font-size: 11px; color: var(--kw-muted); }
+  .tx-list { display: flex; flex-direction: column; gap: 8px; }
+  .tx-item {
+    background: var(--kw-surface);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+  .tx-info { display: flex; align-items: center; gap: 12px; }
+  .tx-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .tx-icon.dep { background: rgba(0,179,126,0.15); }
+  .tx-icon.wit { background: rgba(229,57,53,0.15); }
+  .tx-icon.win { background: rgba(245,197,24,0.15); }
+  .tx-detail .tx-desc { font-size: 14px; font-weight: 600; }
+  .tx-detail .tx-date { font-size: 12px; color: var(--kw-muted); }
+  .tx-amount { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; }
+  .tx-amount.pos { color: var(--kw-green); }
+  .tx-amount.neg { color: var(--kw-red); }
+
+  /* ADMIN PANEL */
+  .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .admin-stat {
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .admin-stat .as-label { font-size: 11px; color: var(--kw-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+  .admin-stat .as-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--kw-gold);
+  }
+  .customer-table {
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .ct-header {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr 80px;
+    padding: 11px 16px;
+    background: var(--kw-surface2);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--kw-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--kw-border);
+  }
+  .ct-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr 1fr 1fr 80px;
+    padding: 11px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+    transition: background 0.15s;
+    align-items: center;
+  }
+  .ct-row:hover { background: var(--kw-surface2); }
+  .ct-row .status-pill {
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 700;
+    display: inline-block;
+  }
+  .status-pill.active { background: rgba(0,179,126,0.15); color: var(--kw-green); }
+  .status-pill.inactive { background: rgba(255,255,255,0.06); color: var(--kw-muted); }
+  .ct-row .action-btn {
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(245,197,24,0.3);
+    background: none;
+    color: var(--kw-gold);
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* MODALS */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal-box {
+    background: var(--kw-surface);
+    border: 1px solid var(--kw-border);
+    border-radius: 16px;
+    padding: 28px;
+    width: 360px;
+    max-width: 100%;
+    position: relative;
+  }
+  .modal-box h2 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none;
+    color: var(--kw-muted); cursor: pointer; font-size: 20px;
+  }
+  .pin-confirm-msg {
+    font-size: 14px;
+    color: var(--kw-muted);
+    margin-bottom: 16px;
+  }
+  .error-msg { color: var(--kw-red); font-size: 13px; margin-top: 8px; text-align: center; }
+  .success-msg { color: var(--kw-green); font-size: 13px; margin-top: 8px; text-align: center; }
+
+  /* LIVE SECTION */
+  .live-header {
+    background: linear-gradient(135deg, rgba(255,61,61,0.12) 0%, transparent 100%);
+    border: 1px solid rgba(255,61,61,0.25);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .live-pulse {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--kw-live);
+    animation: pulse 0.8s infinite;
+    flex-shrink: 0;
+  }
+  .live-header-text h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--kw-live);
+    margin-bottom: 3px;
+  }
+  .live-header-text p { font-size: 13px; color: var(--kw-muted); }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 80px; right: 20px;
+    background: var(--kw-surface2);
+    border: 1px solid var(--kw-border);
+    border-radius: 10px;
+    padding: 12px 18px;
+    font-size: 14px;
+    z-index: 999;
+    transition: all 0.3s;
+    opacity: 0;
+    transform: translateY(10px);
+    pointer-events: none;
+    max-width: 280px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.success { border-color: var(--kw-green); }
+  .toast.error { border-color: var(--kw-red); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; height: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .betslip-sidebar { width: 100%; }
+    .ct-header, .ct-row { grid-template-columns: 2fr 1.2fr 1fr 80px; }
+    .ct-header > *:nth-child(3), .ct-header > *:nth-child(5),
+    .ct-row > *:nth-child(3), .ct-row > *:nth-child(5) { display: none; }
+    .hero-banner h1 { font-size: 20px; }
+  }
+
+  .search-bar {
+    width: 100%;
+    padding: 10px 14px;
+    background: var(--kw-surface2);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    color: var(--kw-text);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    outline: none;
+    margin-bottom: 16px;
+  }
+  .search-bar:focus { border-color: var(--kw-gold); }
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--kw-muted);
+  }
+  .empty-state .es-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- SPLASH AUTH -->
+<div id="splash">
+  <div class="splash-bg"></div>
+  <div class="splash-logo">
+    <div class="brand-flag">🇲🇼</div>
+    <div class="brand">KWACHA</div>
+    <div class="brand">BET</div>
+    <div class="brand-sub">Malawi's Premier Betting Platform</div>
+  </div>
+  <div class="auth-card">
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="showAuthTab('login')">LOGIN</button>
+      <button class="auth-tab" onclick="showAuthTab('register')">REGISTER</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-panel active" id="panel-login">
+      <div class="field-group">
+        <label>Malawian Phone Number</label>
+        <input type="tel" id="login-phone" placeholder="+265 99 000 0000" maxlength="13">
+        <div class="hint">Airtel (+265 99) or Mpamba (+265 88)</div>
+      </div>
+      <div class="field-group">
+        <label>4-Digit PIN</label>
+        <div class="pin-row">
+          <input type="password" class="pin-input" maxlength="1" id="lp1" oninput="moveFocus(this,'lp2')">
+          <input type="password" class="pin-input" maxlength="1" id="lp2" oninput="moveFocus(this,'lp3')">
+          <input type="password" class="pin-input" maxlength="1" id="lp3" oninput="moveFocus(this,'lp4')">
+          <input type="password" class="pin-input" maxlength="1" id="lp4">
+        </div>
+      </div>
+      <div id="login-error" class="error-msg" style="display:none;"></div>
+      <button class="btn-primary" onclick="doLogin()">LOGIN TO KWACHA BET</button>
+      <button class="btn-outline" onclick="showAuthTab('register')">Create Account →</button>
+    </div>
+
+    <!-- REGISTER -->
+    <div class="auth-panel" id="panel-register">
+      <div class="field-group">
+        <label>Full Name</label>
+        <input type="text" id="reg-name" placeholder="Your full name">
+      </div>
+      <div class="field-group">
+        <label>Malawian Phone Number</label>
+        <input type="tel" id="reg-phone" placeholder="+265 99 000 0000" maxlength="13">
+        <div class="hint">Must be a valid Malawian number (+265 88 or +265 99)</div>
+      </div>
+      <div class="field-group">
+        <label>Set 4-Digit PIN</label>
+        <div class="pin-row">
+          <input type="password" class="pin-input" maxlength="1" id="rp1" oninput="moveFocus(this,'rp2')">
+          <input type="password" class="pin-input" maxlength="1" id="rp2" oninput="moveFocus(this,'rp3')">
+          <input type="password" class="pin-input" maxlength="1" id="rp3" oninput="moveFocus(this,'rp4')">
+          <input type="password" class="pin-input" maxlength="1" id="rp4">
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Confirm PIN</label>
+        <div class="pin-row">
+          <input type="password" class="pin-input" maxlength="1" id="cp1" oninput="moveFocus(this,'cp2')">
+          <input type="password" class="pin-input" maxlength="1" id="cp2" oninput="moveFocus(this,'cp3')">
+          <input type="password" class="pin-input" maxlength="1" id="cp3" oninput="moveFocus(this,'cp4')">
+          <input type="password" class="pin-input" maxlength="1" id="cp4">
+        </div>
+      </div>
+      <div id="reg-error" class="error-msg" style="display:none;"></div>
+      <button class="btn-primary" onclick="doRegister()">CREATE ACCOUNT</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+  <nav class="topnav">
+    <div class="nav-brand" onclick="showSection('home')">KWACHA BET</div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="showSection('home')" id="nav-home">🏠 HOME</button>
+      <button class="nav-link" onclick="showSection('live')" id="nav-live">
+        <span class="live-dot"></span> LIVE
+      </button>
+      <button class="nav-link" onclick="showSection('sports')" id="nav-sports">⚽ SPORTS</button>
+      <button class="nav-link" onclick="showSection('mybets')" id="nav-mybets">🎟 MY BETS</button>
+      <button class="nav-link" onclick="showSection('wallet')" id="nav-wallet">💳 WALLET</button>
+      <button class="nav-link" onclick="showSection('admin')" id="nav-admin">⚙ ADMIN</button>
+    </div>
+    <div class="nav-right">
+      <div class="balance-chip" onclick="showSection('wallet')">
+        <span>MWK</span> <span id="nav-balance">0.00</span>
+      </div>
+      <button class="avatar-btn" id="user-avatar">KB</button>
+    </div>
+  </nav>
+
+  <div class="main-content">
+
+    <!-- HOME -->
+    <div class="section active" id="section-home">
+      <div class="hero-banner">
+        <h1>Welcome to KWACHA BET 🇲🇼</h1>
+        <p id="hero-greeting">Ready to win? Place your bets on top sports from around the world.</p>
+        <div class="hero-btns">
+          <button class="hero-btn gold" onclick="showSection('sports')">⚽ BET NOW</button>
+          <button class="hero-btn ghost" onclick="showSection('live')">🔴 LIVE GAMES</button>
+          <button class="hero-btn ghost" onclick="showSection('wallet')">💳 DEPOSIT</button>
+        </div>
+      </div>
+
+      <div class="sport-cats" id="sport-cats-home">
+        <div class="sport-cat active" onclick="filterSport('all',this)"><span class="icon">🌍</span> All Sports</div>
+        <div class="sport-cat" onclick="filterSport('football',this)"><span class="icon">⚽</span> Football</div>
+        <div class="sport-cat" onclick="filterSport('basketball',this)"><span class="icon">🏀</span> Basketball</div>
+        <div class="sport-cat" onclick="filterSport('tennis',this)"><span class="icon">🎾</span> Tennis</div>
+        <div class="sport-cat" onclick="filterSport('baseball',this)"><span class="icon">⚾</span> Baseball</div>
+        <div class="sport-cat" onclick="filterSport('icehockey',this)"><span class="icon">🏒</span> Ice Hockey</div>
+        <div class="sport-cat" onclick="filterSport('rugby',this)"><span class="icon">🏉</span> Rugby</div>
+        <div class="sport-cat" onclick="filterSport('mma',this)"><span class="icon">🥊</span> MMA</div>
+      </div>
+
+      <div class="section-title">
+        🔥 FEATURED MATCHES <span class="badge" id="featured-count">8</span>
+      </div>
+      <div class="match-list" id="home-matches"></div>
+    </div>
+
+    <!-- LIVE -->
+    <div class="section" id="section-live">
+      <div class="live-header">
+        <div class="live-pulse"></div>
+        <div class="live-header-text">
+          <h2>LIVE BETTING</h2>
+          <p>Bet on games happening right now — odds update in real time</p>
+        </div>
+      </div>
+      <div class="section-title">
+        <span class="live-badge"><span class="live-dot"></span> LIVE NOW</span>
+        <span id="live-count" style="font-size:13px; color: var(--kw-muted); font-weight:400;">6 matches</span>
+      </div>
+      <div class="match-list" id="live-matches"></div>
+    </div>
+
+    <!-- SPORTS -->
+    <div class="section" id="section-sports">
+      <input type="text" class="search-bar" placeholder="🔍  Search teams, leagues or competitions..." oninput="filterSearch(this.value)">
+      <div class="sport-cats" id="sport-cats-sports">
+        <div class="sport-cat active" onclick="filterSportPage('all',this)"><span class="icon">🌍</span> All</div>
+        <div class="sport-cat" onclick="filterSportPage('football',this)"><span class="icon">⚽</span> Football</div>
+        <div class="sport-cat" onclick="filterSportPage('basketball',this)"><span class="icon">🏀</span> Basketball</div>
+        <div class="sport-cat" onclick="filterSportPage('tennis',this)"><span class="icon">🎾</span> Tennis</div>
+        <div class="sport-cat" onclick="filterSportPage('baseball',this)"><span class="icon">⚾</span> Baseball</div>
+        <div class="sport-cat" onclick="filterSportPage('icehockey',this)"><span class="icon">🏒</span> Ice Hockey</div>
+        <div class="sport-cat" onclick="filterSportPage('rugby',this)"><span class="icon">🏉</span> Rugby</div>
+        <div class="sport-cat" onclick="filterSportPage('mma',this)"><span class="icon">🥊</span> MMA</div>
+      </div>
+      <div class="match-list" id="sports-matches"></div>
+    </div>
+
+    <!-- MY BETS -->
+    <div class="section" id="section-mybets">
+      <div class="tab-group">
+        <button class="tab-btn active" onclick="showBetTab('open',this)">📂 OPEN BETS</button>
+        <button class="tab-btn" onclick="showBetTab('settled',this)">✅ SETTLED BETS</button>
+      </div>
+      <div id="bet-tab-open">
+        <div id="open-bets-list"></div>
+      </div>
+      <div id="bet-tab-settled" style="display:none;">
+        <div id="settled-bets-list"></div>
+      </div>
+    </div>
+
+    <!-- WALLET -->
+    <div class="section" id="section-wallet">
+      <div class="wallet-cards">
+        <div class="wallet-card">
+          <div class="wc-label">Available Balance</div>
+          <div class="wc-amount" id="wallet-balance">MWK 0.00</div>
+          <div class="wc-sub">Malawian Kwacha</div>
+        </div>
+        <div class="wallet-card">
+          <div class="wc-label">Total Deposited</div>
+          <div class="wc-amount" id="wallet-deposited">MWK 0.00</div>
+          <div class="wc-sub">All time</div>
+        </div>
+        <div class="wallet-card">
+          <div class="wc-label">Total Winnings</div>
+          <div class="wc-amount" id="wallet-winnings">MWK 0.00</div>
+          <div class="wc-sub">All time</div>
+        </div>
+      </div>
+
+      <div class="section-title">DEPOSIT FUNDS</div>
+      <div class="payment-methods" id="pay-methods">
+        <div class="pay-method selected" id="pm-airtel" onclick="selectPayMethod('airtel')">
+          <div class="pm-icon">📱</div>
+          <div class="pm-name">Airtel Money</div>
+          <div class="pm-sub">+265 99x xxx xxx</div>
+        </div>
+        <div class="pay-method" id="pm-mpamba" onclick="selectPayMethod('mpamba')">
+          <div class="pm-icon">💳</div>
+          <div class="pm-name">Mpamba (TNM)</div>
+          <div class="pm-sub">+265 88x xxx xxx</div>
+        </div>
+        <div class="pay-method" id="pm-paychangu" onclick="selectPayMethod('paychangu')">
+          <div class="pm-icon">🌐</div>
+          <div class="pm-name">Paychangu</div>
+          <div class="pm-sub">Card / Online</div>
+        </div>
+        <div class="pay-method" id="pm-bank" onclick="selectPayMethod('bank')">
+          <div class="pm-icon">🏦</div>
+          <div class="pm-name">Bank Transfer</div>
+          <div class="pm-sub">NBM / Standard Bank</div>
+        </div>
+      </div>
+      <div class="field-group" style="max-width:400px;">
+        <label>Amount (MWK)</label>
+        <input type="number" id="dep-amount" placeholder="e.g. 5000" min="500">
+        <div class="hint">Minimum deposit: MWK 500</div>
+      </div>
+      <div id="wallet-pm-info" style="font-size:13px; color:var(--kw-muted); margin-bottom:14px;"></div>
+      <button class="btn-primary btn-green" style="max-width:400px;" onclick="doDeposit()">DEPOSIT NOW</button>
+
+      <div class="section-title" style="margin-top:28px;">
+        WITHDRAW FUNDS
+      </div>
+      <div class="field-group" style="max-width:400px;">
+        <label>Withdraw Amount (MWK)</label>
+        <input type="number" id="wit-amount" placeholder="e.g. 2000" min="500">
+        <div class="hint">Minimum withdrawal: MWK 500. Confirm with your PIN.</div>
+      </div>
+      <button class="btn-primary" style="max-width:400px; background:var(--kw-surface2); border:1px solid var(--kw-border); color:var(--kw-text);" onclick="openWithdrawModal()">REQUEST WITHDRAWAL</button>
+
+      <div class="section-title" style="margin-top:28px;">TRANSACTION HISTORY</div>
+      <div class="tx-list" id="tx-list"></div>
+    </div>
+
+    <!-- ADMIN -->
+    <div class="section" id="section-admin">
+      <div class="section-title">⚙ CUSTOMER MANAGER — ADMIN PANEL</div>
+      <div class="admin-grid">
+        <div class="admin-stat"><div class="as-label">Total Customers</div><div class="as-value" id="stat-customers">0</div></div>
+        <div class="admin-stat"><div class="as-label">Active Today</div><div class="as-value" id="stat-active">0</div></div>
+        <div class="admin-stat"><div class="as-label">Total Bets</div><div class="as-value" id="stat-bets">0</div></div>
+        <div class="admin-stat"><div class="as-label">Revenue (MWK)</div><div class="as-value" id="stat-revenue">0</div></div>
+        <div class="admin-stat"><div class="as-label">Pending Withdrawals</div><div class="as-value" id="stat-pending">0</div></div>
+      </div>
+
+      <div class="section-title" style="margin-bottom:12px;">CUSTOMER RECORDS</div>
+      <div class="customer-table">
+        <div class="ct-header">
+          <div>Customer</div>
+          <div>Phone</div>
+          <div>Balance</div>
+          <div>Total Bets</div>
+          <div>Status</div>
+          <div>Action</div>
+        </div>
+        <div id="customer-rows"></div>
+      </div>
+
+      <div class="section-title" style="margin-bottom:12px;">ALL TRANSACTIONS</div>
+      <div class="tx-list" id="admin-tx-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BET SLIP SIDEBAR -->
+<div class="betslip-sidebar hidden" id="betslip">
+  <div class="betslip-header">
+    <h3>BET SLIP <div class="slip-count" id="slip-count">0</div></h3>
+    <button style="background:none;border:none;color:var(--kw-muted);cursor:pointer;font-size:13px;" onclick="clearSlip()">CLEAR ALL</button>
+  </div>
+  <div class="betslip-body" id="slip-body">
+    <div class="empty-state"><div class="es-icon">🎟</div><p>Add selections to your bet slip</p></div>
+  </div>
+  <div class="betslip-footer">
+    <div class="slip-row">
+      <span>Selections</span><span id="slip-num">0</span>
+    </div>
+    <div class="slip-row">
+      <span>Total Odds</span><span id="slip-total-odds" style="color:var(--kw-gold);font-weight:700;">1.00</span>
+    </div>
+    <input type="number" class="slip-stake-input" placeholder="Stake (MWK)" id="slip-stake" oninput="updateSlip()">
+    <div class="slip-row total">
+      <span>Potential Win</span><span id="slip-win" style="color:var(--kw-green);">MWK 0.00</span>
+    </div>
+    <button class="btn-primary" onclick="placeBet()">PLACE BET</button>
+    <button class="btn-outline" onclick="toggleBetSlip()">CLOSE SLIP</button>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="betslip-fab" id="betslip-fab" onclick="toggleBetSlip()" style="display:none;">
+  🎟 BET SLIP <span class="fab-count" id="fab-count">0</span>
+</button>
+
+<!-- WITHDRAW CONFIRM MODAL -->
+<div class="modal-overlay" id="withdraw-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('withdraw-modal')">✕</button>
+    <h2>🔒 Confirm Withdrawal</h2>
+    <p class="pin-confirm-msg">Enter your 4-digit PIN to authorise this withdrawal</p>
+    <div class="pin-row" style="margin-bottom:12px;">
+      <input type="password" class="pin-input" maxlength="1" id="wp1" oninput="moveFocus(this,'wp2')">
+      <input type="password" class="pin-input" maxlength="1" id="wp2" oninput="moveFocus(this,'wp3')">
+      <input type="password" class="pin-input" maxlength="1" id="wp3" oninput="moveFocus(this,'wp4')">
+      <input type="password" class="pin-input" maxlength="1" id="wp4">
+    </div>
+    <div id="withdraw-error" class="error-msg" style="display:none;"></div>
+    <div id="withdraw-success" class="success-msg" style="display:none;"></div>
+    <button class="btn-primary" onclick="confirmWithdrawal()">CONFIRM WITHDRAWAL</button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============ STATE ============
+let state = {
+  user: null,
+  balance: 5000,
+  depositedTotal: 0,
+  winningsTotal: 0,
+  betSlip: [],
+  bets: [],
+  transactions: [],
+  selectedPayMethod: 'airtel',
+  currentSection: 'home',
+  sportFilter: 'all',
+  sportPageFilter: 'all',
+  searchQuery: '',
+};
+
+// Demo customer database
+let customers = [];
+
+// ============ MATCH DATA ============
+const allMatches = [
+  // FOOTBALL - Big Leagues
+  { id:'m1', sport:'football', league:'Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿', home:'Arsenal', away:'Manchester City', time:'20:00', date:'Today', odds:{h:2.20,d:3.40,a:3.10}, live:false },
+  { id:'m2', sport:'football', league:'La Liga 🇪🇸', home:'Real Madrid', away:'Barcelona', time:'21:00', date:'Today', odds:{h:1.95,d:3.60,a:3.80}, live:false },
+  { id:'m3', sport:'football', league:'Champions League ⭐', home:'Bayern Munich', away:'PSG', time:'20:45', date:'Today', odds:{h:2.10,d:3.50,a:3.20}, live:false },
+  { id:'m4', sport:'football', league:'Serie A 🇮🇹', home:'Juventus', away:'Inter Milan', time:'18:00', date:'Today', odds:{h:2.40,d:3.20,a:2.80}, live:false },
+  { id:'m5', sport:'football', league:'Bundesliga 🇩🇪', home:'Borussia Dortmund', away:'RB Leipzig', time:'15:30', date:'Today', odds:{h:1.80,d:3.70,a:4.10}, live:false },
+  { id:'m6', sport:'football', league:'CAF Champions League 🌍', home:'Al Ahly', away:'Esperance', time:'19:00', date:'Today', odds:{h:1.90,d:3.40,a:3.90}, live:false },
+  { id:'m7', sport:'football', league:'Ligue 1 🇫🇷', home:'PSG', away:'Marseille', time:'21:00', date:'Tomorrow', odds:{h:1.50,d:3.90,a:5.50}, live:false },
+  { id:'m8', sport:'football', league:'Malawi Premier League 🇲🇼', home:'Nyasa Big Bullets', away:'Silver Strikers', time:'15:00', date:'Today', odds:{h:1.75,d:3.50,a:4.20}, live:false },
+
+  // BASKETBALL
+  { id:'m9', sport:'basketball', league:'NBA 🇺🇸', home:'Lakers', away:'Warriors', time:'01:30', date:'Tonight', odds:{h:1.85,d:null,a:1.95}, live:false },
+  { id:'m10', sport:'basketball', league:'NBA 🇺🇸', home:'Celtics', away:'Heat', time:'03:00', date:'Tonight', odds:{h:1.60,d:null,a:2.30}, live:false },
+  { id:'m11', sport:'basketball', league:'EuroLeague 🇪🇺', home:'Real Madrid', away:'CSKA Moscow', time:'20:00', date:'Today', odds:{h:1.70,d:null,a:2.10}, live:false },
+
+  // TENNIS
+  { id:'m12', sport:'tennis', league:'Roland Garros 🇫🇷', home:'Djokovic', away:'Alcaraz', time:'14:00', date:'Today', odds:{h:1.65,d:null,a:2.20}, live:false },
+  { id:'m13', sport:'tennis', league:'Wimbledon 🇬🇧', home:'Sinner', away:'Medvedev', time:'16:30', date:'Today', odds:{h:1.80,d:null,a:2.00}, live:false },
+
+  // BASEBALL
+  { id:'m14', sport:'baseball', league:'MLB 🇺🇸', home:'New York Yankees', away:'LA Dodgers', time:'01:00', date:'Tonight', odds:{h:1.90,d:null,a:1.90}, live:false },
+  { id:'m15', sport:'baseball', league:'MLB 🇺🇸', home:'Chicago Cubs', away:'Boston Red Sox', time:'23:00', date:'Tonight', odds:{h:2.10,d:null,a:1.75}, live:false },
+
+  // ICE HOCKEY
+  { id:'m16', sport:'icehockey', league:'NHL 🇺🇸', home:'Toronto Maple Leafs', away:'Montreal Canadiens', time:'00:00', date:'Tonight', odds:{h:1.75,d:null,a:2.05}, live:false },
+  { id:'m17', sport:'icehockey', league:'NHL 🇺🇸', home:'Pittsburgh Penguins', away:'Philadelphia Flyers', time:'02:00', date:'Tonight', odds:{h:1.65,d:null,a:2.20}, live:false },
+
+  // RUGBY
+  { id:'m18', sport:'rugby', league:'Six Nations 🏴󠁧󠁢󠁥󠁮󠁧󠁿', home:'England', away:'France', time:'17:00', date:'Today', odds:{h:2.10,d:null,a:1.75}, live:false },
+  { id:'m19', sport:'rugby', league:'Rugby Championship 🏉', home:'South Africa', away:'New Zealand', time:'19:00', date:'Today', odds:{h:1.90,d:null,a:1.90}, live:false },
+
+  // MMA
+  { id:'m20', sport:'mma', league:'UFC 312 🥊', home:'Islam Makhachev', away:'Justin Gaethje', time:'04:00', date:'Saturday', odds:{h:1.45,d:null,a:2.70}, live:false },
+];
+
+const liveMatches = [
+  { id:'l1', sport:'football', league:'Premier League 🏴󠁧󠁢󠁥󠁮󠁧󠁿', home:'Chelsea', away:'Liverpool', time:"73'", score:{h:1,a:2}, odds:{h:5.50,d:4.20,a:1.40}, live:true },
+  { id:'l2', sport:'football', league:'La Liga 🇪🇸', home:'Atletico Madrid', away:'Sevilla', time:"45+2'", score:{h:0,a:0}, odds:{h:2.10,d:2.80,a:3.40}, live:true },
+  { id:'l3', sport:'football', league:'Serie A 🇮🇹', home:'AC Milan', away:'Napoli', time:"58'", score:{h:2,a:1}, odds:{h:1.60,d:3.80,a:4.90}, live:true },
+  { id:'l4', sport:'basketball', league:'NBA 🇺🇸', home:'Bucks', away:'76ers', time:"Q3 8:22", score:{h:74,a:68}, odds:{h:1.55,d:null,a:2.40}, live:true },
+  { id:'l5', sport:'tennis', league:'Australian Open 🇦🇺', home:'Nadal', away:'Federer', time:"2nd Set 4-3", score:{h:'1-0',a:'0-1'}, odds:{h:1.70,d:null,a:2.10}, live:true },
+  { id:'l6', sport:'icehockey', league:'NHL 🇺🇸', home:'Vegas Golden Knights', away:'Colorado Avalanche', time:"P2 14:05", score:{h:3,a:2}, odds:{h:1.80,d:null,a:2.00}, live:true },
+];
+
+// ============ AUTH ============
+function moveFocus(el, nextId) {
+  if (el.value.length >= 1 && nextId) {
+    const next = document.getElementById(nextId);
+    if (next) next.focus();
+  }
+}
+
+function showAuthTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t,i) => {
+    t.classList.toggle('active', (i === 0 && tab==='login') || (i === 1 && tab==='register'));
+  });
+  document.getElementById('panel-login').classList.toggle('active', tab==='login');
+  document.getElementById('panel-register').classList.toggle('active', tab==='register');
+}
+
+function getPin(prefix) {
+  return ['1','2','3','4'].map(n => document.getElementById(prefix+n).value).join('');
+}
+
+function validateMalawiPhone(phone) {
+  const cleaned = phone.replace(/\s/g,'');
+  return /^\+265(88|99)\d{7}$/.test(cleaned) || /^0(88|99)\d{7}$/.test(cleaned);
+}
+
+function doRegister() {
+  const name = document.getElementById('reg-name').value.trim();
+  const phone = document.getElementById('reg-phone').value.trim();
+  const pin = getPin('rp');
+  const cpin = getPin('cp');
+  const errEl = document.getElementById('reg-error');
+
+  if (!name) { showErr('reg-error','Please enter your name.'); return; }
+  if (!validateMalawiPhone(phone)) {
+    showErr('reg-error','Please enter a valid Malawian number (+265 88x or +265 99x).');
+    return;
+  }
+  if (pin.length < 4) { showErr('reg-error','Enter all 4 PIN digits.'); return; }
+  if (pin !== cpin) { showErr('reg-error','PINs do not match.'); return; }
+
+  const existing = customers.find(c => c.phone === phone);
+  if (existing) { showErr('reg-error','Account with this number already exists.'); return; }
+
+  const newUser = { id: Date.now(), name, phone, pin, balance: 5000, bets: [], transactions: [{type:'dep',amount:5000,desc:'Welcome Bonus',date:new Date().toLocaleString(),method:'KWACHA BET'}], registeredAt: new Date().toLocaleString(), active: true };
+  customers.push(newUser);
+  errEl.style.display='none';
+  loginUser(newUser);
+}
+
+function doLogin() {
+  const phone = document.getElementById('login-phone').value.trim();
+  const pin = getPin('lp');
+
+  if (!validateMalawiPhone(phone)) {
+    showErr('login-error','Invalid Malawian number. Use +265 88x or +265 99x format.');
+    return;
+  }
+  if (pin.length < 4) { showErr('login-error','Enter your 4-digit PIN.'); return; }
+
+  // Demo: allow any valid number
+  let user = customers.find(c => c.phone === phone && c.pin === pin);
+  if (!user) {
+    // Auto-create demo user
+    user = { id: Date.now(), name:'Demo User', phone, pin, balance: 5000, bets:[], transactions:[{type:'dep',amount:5000,desc:'Welcome Bonus',date:new Date().toLocaleString(),method:'KWACHA BET'}], registeredAt:new Date().toLocaleString(), active:true };
+    customers.push(user);
+  }
+  loginUser(user);
+}
+
+function loginUser(user) {
+  state.user = user;
+  state.balance = user.balance;
+  state.transactions = user.transactions || [];
+  state.bets = user.bets || [];
+  document.getElementById('splash').style.display = 'none';
+  document.getElementById('app').classList.add('visible');
+  const initials = user.name.split(' ').map(n=>n[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('user-avatar').textContent = initials;
+  document.getElementById('hero-greeting').textContent = `Welcome back, ${user.name.split(' ')[0]}! Ready to win big?`;
+  updateBalanceDisplay();
+  renderMatches();
+  renderLiveMatches();
+  renderBets();
+  renderTransactions();
+  renderAdminPanel();
+  showSection('home');
+}
+
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+// ============ SECTIONS ============
+function showSection(name) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  document.getElementById('section-'+name).classList.add('active');
+  document.getElementById('nav-'+name).classList.add('active');
+  state.currentSection = name;
+  if (name === 'wallet') { renderTransactions(); updateWalletDisplay(); }
+  if (name === 'mybets') { renderBets(); }
+  if (name === 'admin') { renderAdminPanel(); }
+}
+
+// ============ MATCHES ============
+function renderMatchCard(m, container, isLive) {
+  const card = document.createElement('div');
+  card.className = 'match-card' + (isLive ? ' live-card' : '');
+
+  const hasScore = isLive && m.score;
+  const timeStr = isLive
+    ? `<span class="match-time live"><span class="live-dot" style="width:6px;height:6px;background:var(--kw-live);border-radius:50%;animation:pulse 0.8s infinite;display:inline-block;"></span> ${m.time}</span>`
+    : `<span class="match-time">${m.time} · ${m.date}</span>`;
+
+  const homeScore = hasScore ? `<div class="team-score">${m.score.h}</div>` : '';
+  const awayScore = hasScore ? `<div class="team-score">${m.score.a}</div>` : '';
+
+  const d_btn = m.odds.d !== null
+    ? `<div class="odd-btn" id="odd-${m.id}-d" onclick="addToSlip('${m.id}','Draw','${m.odds.d}','${m.home} vs ${m.away}')">
+        <div class="odd-label">DRAW</div><div class="odd-val">${m.odds.d.toFixed(2)}</div></div>` : '';
+
+  card.innerHTML = `
+    <div class="match-meta">
+      <div class="match-league"><span>${m.league}</span></div>
+      ${timeStr}
+    </div>
+    <div class="match-teams">
+      <div class="team-info">
+        <div class="team-name">${m.home}</div>
+        ${homeScore}
+      </div>
+      <div class="vs-divider">${hasScore ? 'VS' : 'VS'}</div>
+      <div class="team-info">
+        <div class="team-name">${m.away}</div>
+        ${awayScore}
+      </div>
+    </div>
+    <div class="odds-row">
+      <div class="odd-btn" id="odd-${m.id}-h" onclick="addToSlip('${m.id}','1 (${m.home})','${m.odds.h}','${m.home} vs ${m.away}')">
+        <div class="odd-label">${m.sport==='tennis'||m.sport==='baseball'||m.sport==='basketball'||m.sport==='icehockey'||m.sport==='rugby'||m.sport==='mma' ? m.home : '1'}</div>
+        <div class="odd-val">${m.odds.h.toFixed(2)}</div>
+      </div>
+      ${d_btn}
+      <div class="odd-btn" id="odd-${m.id}-a" onclick="addToSlip('${m.id}','2 (${m.away})','${m.odds.a}','${m.home} vs ${m.away}')">
+        <div class="odd-label">${m.sport==='tennis'||m.sport==='baseball'||m.sport==='basketball'||m.sport==='icehockey'||m.sport==='rugby'||m.sport==='mma' ? m.away : '2'}</div>
+        <div class="odd-val">${m.odds.a.toFixed(2)}</div>
+      </div>
+    </div>`;
+  container.appendChild(card);
+}
+
+function renderMatches() {
+  const container = document.getElementById('home-matches');
+  container.innerHTML = '';
+  const filtered = state.sportFilter === 'all' ? allMatches : allMatches.filter(m => m.sport === state.sportFilter);
+  document.getElementById('featured-count').textContent = filtered.length;
+  filtered.forEach(m => renderMatchCard(m, container, false));
+}
+
+function renderSportsMatches() {
+  const container = document.getElementById('sports-matches');
+  container.innerHTML = '';
+  let filtered = state.sportPageFilter === 'all' ? allMatches : allMatches.filter(m => m.sport === state.sportPageFilter);
+  if (state.searchQuery) {
+    const q = state.searchQuery.toLowerCase();
+    filtered = filtered.filter(m => m.home.toLowerCase().includes(q) || m.away.toLowerCase().includes(q) || m.league.toLowerCase().includes(q));
+  }
+  if (filtered.length === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="es-icon">🔍</div><p>No matches found</p></div>';
+    return;
+  }
+  filtered.forEach(m => renderMatchCard(m, container, false));
+}
+
+function renderLiveMatches() {
+  const container = document.getElementById('live-matches');
+  container.innerHTML = '';
+  liveMatches.forEach(m => renderMatchCard(m, container, true));
+}
+
+function filterSport(sport, el) {
+  state.sportFilter = sport;
+  document.querySelectorAll('#sport-cats-home .sport-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderMatches();
+}
+
+function filterSportPage(sport, el) {
+  state.sportPageFilter = sport;
+  document.querySelectorAll('#sport-cats-sports .sport-cat').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  renderSportsMatches();
+}
+
+function filterSearch(q) {
+  state.searchQuery = q;
+  renderSportsMatches();
+}
+
+// ============ BET SLIP ============
+function addToSlip(matchId, pick, odd, teams) {
+  const existing = state.betSlip.find(b => b.matchId === matchId);
+  if (existing) {
+    if (existing.pick === pick) {
+      state.betSlip = state.betSlip.filter(b => b.matchId !== matchId);
+      document.getElementById('odd-'+matchId+'-h')?.classList.remove('selected');
+      document.getElementById('odd-'+matchId+'-d')?.classList.remove('selected');
+      document.getElementById('odd-'+matchId+'-a')?.classList.remove('selected');
+    } else {
+      existing.pick = pick;
+      existing.odd = parseFloat(odd);
+      document.getElementById('odd-'+matchId+'-h')?.classList.remove('selected');
+      document.getElementById('odd-'+matchId+'-d')?.classList.remove('selected');
+      document.getElementById('odd-'+matchId+'-a')?.classList.remove('selected');
+    }
+  } else {
+    state.betSlip.push({ matchId, pick, odd: parseFloat(odd), teams });
+  }
+
+  const side = pick.includes(document.getElementById('odd-'+matchId+'-h') ? 'h':'') ? 'h' :
+               pick.includes('Draw') ? 'd' : 'a';
+  const pickLower = pick.toLowerCase();
+  const hdBtn = document.getElementById('odd-'+matchId+'-h');
+  const ddBtn = document.getElementById('odd-'+matchId+'-d');
+  const adBtn = document.getElementById('odd-'+matchId+'-a');
+
+  const inSlip = state.betSlip.find(b => b.matchId === matchId);
+  if (hdBtn) hdBtn.classList.toggle('selected', inSlip?.pick === pick && pickLower.includes('draw') === false && pickLower === hdBtn?.querySelector('.odd-val')?.textContent ? false : inSlip?.pick === pick);
+  // simpler approach: just check pick equality
+  [hdBtn, ddBtn, adBtn].forEach(btn => btn?.classList.remove('selected'));
+  if (inSlip) {
+    if (inSlip.pick.includes('Draw') && ddBtn) ddBtn.classList.add('selected');
+    else if (!inSlip.pick.includes('Draw')) {
+      if (hdBtn && inSlip.pick.includes(hdBtn.querySelector('.odd-label')?.textContent || 'X')) hdBtn.classList.add('selected');
+    }
+  }
+
+  renderBetSlip();
+  if (state.betSlip.length > 0 && !document.getElementById('betslip').classList.contains('hidden') === false) {
+    document.getElementById('betslip').classList.remove('hidden');
+  }
+  updateFAB();
+  showToast(`✅ ${teams} added to slip!`, 'success');
+}
+
+function renderBetSlip() {
+  const body = document.getElementById('slip-body');
+  const count = state.betSlip.length;
+  document.getElementById('slip-count').textContent = count;
+  document.getElementById('slip-num').textContent = count;
+  document.getElementById('fab-count').textContent = count;
+
+  if (count === 0) {
+    body.innerHTML = '<div class="empty-state"><div class="es-icon">🎟</div><p>Add selections to your bet slip</p></div>';
+    document.getElementById('slip-total-odds').textContent = '1.00';
+    document.getElementById('slip-win').textContent = 'MWK 0.00';
+    return;
+  }
+
+  body.innerHTML = '';
+  state.betSlip.forEach(b => {
+    const item = document.createElement('div');
+    item.className = 'slip-item';
+    item.innerHTML = `
+      <div class="slip-item-teams">${b.teams}</div>
+      <div class="slip-item-pick">
+        <span>${b.pick}</span>
+        <span class="odd">${b.odd.toFixed(2)}</span>
+      </div>
+      <button class="slip-remove" onclick="removeFromSlip('${b.matchId}')">✕</button>`;
+    body.appendChild(item);
+  });
+  updateSlip();
+}
+
+function updateSlip() {
+  const totalOdds = state.betSlip.reduce((acc, b) => acc * b.odd, 1);
+  const stake = parseFloat(document.getElementById('slip-stake').value) || 0;
+  const win = stake * totalOdds;
+  document.getElementById('slip-total-odds').textContent = totalOdds.toFixed(2);
+  document.getElementById('slip-win').textContent = 'MWK ' + win.toFixed(2);
+}
+
+function removeFromSlip(matchId) {
+  state.betSlip = state.betSlip.filter(b => b.matchId !== matchId);
+  renderBetSlip();
+  updateFAB();
+}
+
+function clearSlip() {
+  state.betSlip = [];
+  renderBetSlip();
+  updateFAB();
+}
+
+function toggleBetSlip() {
+  const slip = document.getElementById('betslip');
+  slip.classList.toggle('hidden');
+}
+
+function updateFAB() {
+  const fab = document.getElementById('betslip-fab');
+  fab.style.display = state.betSlip.length > 0 ? 'flex' : 'none';
+}
+
+function placeBet() {
+  if (state.betSlip.length === 0) { showToast('Add selections first!','error'); return; }
+  const stake = parseFloat(document.getElementById('slip-stake').value);
+  if (!stake || stake < 100) { showToast('Minimum stake is MWK 100','error'); return; }
+  if (stake > state.balance) { showToast('Insufficient balance!','error'); return; }
+
+  const totalOdds = state.betSlip.reduce((acc, b) => acc * b.odd, 1);
+  const potentialWin = stake * totalOdds;
+  const betId = 'KB' + Date.now().toString().slice(-6);
+  const newBet = {
+    id: betId,
+    legs: state.betSlip.map(b => ({ ...b, result: 'pending' })),
+    stake,
+    totalOdds: totalOdds.toFixed(2),
+    potential: potentialWin.toFixed(2),
+    status: 'open',
+    date: new Date().toLocaleString(),
+  };
+  state.bets.unshift(newBet);
+  state.balance -= stake;
+  state.transactions.unshift({ type:'bet', amount:-stake, desc:`Bet #${betId} (${state.betSlip.length} selections)`, date:new Date().toLocaleString(), method:'Account' });
+  if (state.user) { state.user.balance = state.balance; state.user.bets = state.bets; state.user.transactions = state.transactions; }
+
+  updateBalanceDisplay();
+  clearSlip();
+  document.getElementById('betslip').classList.add('hidden');
+  showToast(`🎟 Bet #${betId} placed! Potential win: MWK ${potentialWin.toFixed(2)}`, 'success');
+  showSection('mybets');
+}
+
+// ============ MY BETS ============
+function showBetTab(tab, el) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('bet-tab-open').style.display = tab==='open' ? 'block' : 'none';
+  document.getElementById('bet-tab-settled').style.display = tab==='settled' ? 'block' : 'none';
+}
+
+function renderBets() {
+  const openList = document.getElementById('open-bets-list');
+  const settledList = document.getElementById('settled-bets-list');
+  openList.innerHTML = '';
+  settledList.innerHTML = '';
+
+  const open = state.bets.filter(b => b.status === 'open');
+  const settled = state.bets.filter(b => b.status !== 'open');
+
+  if (open.length === 0) {
+    openList.innerHTML = '<div class="empty-state"><div class="es-icon">📂</div><p>No open bets. Place a bet to get started!</p></div>';
+  } else {
+    open.forEach(b => renderTicket(b, openList));
+  }
+
+  // Add sample settled bets
+  const demo = [
+    { id:'KB100001', legs:[{teams:'Arsenal vs Chelsea',pick:'1 (Arsenal)',odd:2.20,result:'win'},{teams:'Real Madrid vs Barcelona',pick:'Draw',odd:3.60,result:'win'}], stake:500, totalOdds:'7.92', potential:'3960.00', status:'won', date:'25/03/2026 18:00' },
+    { id:'KB100002', legs:[{teams:'Lakers vs Warriors',pick:'1 (Lakers)',odd:1.85,result:'loss'}], stake:1000, totalOdds:'1.85', potential:'1850.00', status:'lost', date:'24/03/2026 03:00' },
+  ];
+  if (settled.length === 0 && demo.length > 0) {
+    demo.forEach(b => renderTicket(b, settledList));
+  } else if (settled.length === 0) {
+    settledList.innerHTML = '<div class="empty-state"><div class="es-icon">✅</div><p>No settled bets yet</p></div>';
+  } else {
+    settled.forEach(b => renderTicket(b, settledList));
+  }
+}
+
+function renderTicket(bet, container) {
+  const card = document.createElement('div');
+  card.className = 'ticket-card';
+  const statusLabel = { open:'OPEN', won:'WON', lost:'LOST', pending:'PENDING' }[bet.status] || bet.status.toUpperCase();
+  const legsHtml = bet.legs.map(l => `
+    <div class="ticket-leg">
+      <div class="leg-info">
+        <div class="leg-teams">${l.teams}</div>
+        <div class="leg-pick">${l.pick}</div>
+      </div>
+      <div style="text-align:right;">
+        <div class="leg-odd">${parseFloat(l.odd).toFixed(2)}</div>
+        <div class="leg-result ${l.result}">${l.result === 'pending' ? '⏳ Pending' : l.result === 'win' ? '✓ Win' : '✗ Loss'}</div>
+      </div>
+    </div>`).join('');
+
+  card.innerHTML = `
+    <div class="ticket-header">
+      <div>
+        <div style="font-weight:700;font-size:14px;">Ticket #${bet.id}</div>
+        <div class="ticket-id">${bet.date} · ${bet.legs.length} selection${bet.legs.length>1?'s':''}</div>
+      </div>
+      <span class="ticket-status ${bet.status}">${statusLabel}</span>
+    </div>
+    <div class="ticket-legs">${legsHtml}</div>
+    <div class="ticket-footer">
+      <span class="stake">Stake: MWK ${parseFloat(bet.stake).toFixed(2)} · Odds: ${bet.totalOdds}</span>
+      <span class="payout">${bet.status==='won' ? '✅ Won: ' : 'Potential: '}MWK ${bet.potential}</span>
+    </div>`;
+  container.appendChild(card);
+}
+
+// ============ WALLET ============
+function selectPayMethod(method) {
+  state.selectedPayMethod = method;
+  document.querySelectorAll('.pay-method').forEach(el => el.classList.remove('selected'));
+  document.getElementById('pm-'+method).classList.add('selected');
+  const hints = {
+    airtel: 'You will receive a prompt on your Airtel Money line to authorize payment.',
+    mpamba: 'You will receive an Mpamba USSD prompt to confirm your deposit.',
+    paychangu: 'You will be redirected to the Paychangu secure payment gateway.',
+    bank: 'Transfer to: KWACHA BET LTD · NBM Account: 1234567890 · Ref: your phone number'
+  };
+  document.getElementById('wallet-pm-info').textContent = hints[method] || '';
+}
+
+function doDeposit() {
+  const amount = parseFloat(document.getElementById('dep-amount').value);
+  if (!amount || amount < 500) { showToast('Minimum deposit is MWK 500','error'); return; }
+  const method = { airtel:'Airtel Money', mpamba:'Mpamba', paychangu:'Paychangu', bank:'Bank Transfer' }[state.selectedPayMethod];
+  state.balance += amount;
+  state.depositedTotal += amount;
+  state.transactions.unshift({ type:'dep', amount, desc:`Deposit via ${method}`, date:new Date().toLocaleString(), method });
+  if (state.user) { state.user.balance = state.balance; state.user.transactions = state.transactions; }
+  updateBalanceDisplay();
+  updateWalletDisplay();
+  renderTransactions();
+  document.getElementById('dep-amount').value = '';
+  showToast(`✅ MWK ${amount.toFixed(2)} deposited via ${method}!`, 'success');
+}
+
+function openWithdrawModal() {
+  const amount = parseFloat(document.getElementById('wit-amount').value);
+  if (!amount || amount < 500) { showToast('Minimum withdrawal is MWK 500','error'); return; }
+  if (amount > state.balance) { showToast('Insufficient balance!','error'); return; }
+  document.getElementById('withdraw-modal').classList.add('open');
+  document.getElementById('withdraw-error').style.display='none';
+  document.getElementById('withdraw-success').style.display='none';
+  ['wp1','wp2','wp3','wp4'].forEach(id => document.getElementById(id).value='');
+}
+
+function confirmWithdrawal() {
+  const pin = getPin('wp');
+  if (pin !== state.user?.pin) {
+    document.getElementById('withdraw-error').textContent = 'Incorrect PIN. Please try again.';
+    document.getElementById('withdraw-error').style.display='block';
+    return;
+  }
+  const amount = parseFloat(document.getElementById('wit-amount').value);
+  state.balance -= amount;
+  state.transactions.unshift({ type:'wit', amount:-amount, desc:`Withdrawal via ${state.selectedPayMethod}`, date:new Date().toLocaleString(), method:state.selectedPayMethod });
+  if (state.user) { state.user.balance = state.balance; state.user.transactions = state.transactions; }
+  document.getElementById('withdraw-success').textContent = `✅ MWK ${amount.toFixed(2)} withdrawal submitted!`;
+  document.getElementById('withdraw-success').style.display='block';
+  document.getElementById('withdraw-error').style.display='none';
+  updateBalanceDisplay();
+  updateWalletDisplay();
+  renderTransactions();
+  document.getElementById('wit-amount').value='';
+  setTimeout(() => closeModal('withdraw-modal'), 2000);
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function renderTransactions() {
+  const list = document.getElementById('tx-list');
+  list.innerHTML = '';
+  const txs = state.transactions || [];
+  if (txs.length === 0) {
+    list.innerHTML = '<div class="empty-state"><div class="es-icon">📋</div><p>No transactions yet</p></div>';
+    return;
+  }
+  txs.slice(0,20).forEach(tx => {
+    const item = document.createElement('div');
+    item.className = 'tx-item';
+    const isPos = tx.amount > 0;
+    const typeIcon = { dep:'💰', wit:'📤', bet:'🎟', win:'🏆' }[tx.type] || '💳';
+    const typeClass = { dep:'dep', wit:'wit', bet:'wit', win:'win' }[tx.type] || 'dep';
+    item.innerHTML = `
+      <div class="tx-info">
+        <div class="tx-icon ${typeClass}">${typeIcon}</div>
+        <div class="tx-detail">
+          <div class="tx-desc">${tx.desc}</div>
+          <div class="tx-date">${tx.date} · ${tx.method}</div>
+        </div>
+      </div>
+      <div class="tx-amount ${isPos?'pos':'neg'}">${isPos?'+':''}MWK ${Math.abs(tx.amount).toFixed(2)}</div>`;
+    list.appendChild(item);
+  });
+}
+
+function updateBalanceDisplay() {
+  document.getElementById('nav-balance').textContent = state.balance.toFixed(2);
+  updateWalletDisplay();
+}
+
+function updateWalletDisplay() {
+  document.getElementById('wallet-balance').textContent = 'MWK ' + state.balance.toFixed(2);
+  document.getElementById('wallet-deposited').textContent = 'MWK ' + state.depositedTotal.toFixed(2);
+  document.getElementById('wallet-winnings').textContent = 'MWK ' + state.winningsTotal.toFixed(2);
+}
+
+// ============ ADMIN ============
+function renderAdminPanel() {
+  document.getElementById('stat-customers').textContent = customers.length;
+  document.getElementById('stat-active').textContent = customers.filter(c=>c.active).length;
+  const totalBets = customers.reduce((a,c) => a+(c.bets||[]).length,0) + state.bets.length;
+  document.getElementById('stat-bets').textContent = totalBets;
+  document.getElementById('stat-revenue').textContent = '287,500';
+  document.getElementById('stat-pending').textContent = '3';
+
+  const rows = document.getElementById('customer-rows');
+  rows.innerHTML = '';
+  const demoCustomers = [
+    { name:'Chisomo Banda', phone:'+265 99 123 4567', balance:12500, bets:8, active:true },
+    { name:'Takondwa Phiri', phone:'+265 88 234 5678', balance:3200, bets:15, active:true },
+    { name:'Mphatso Mwale', phone:'+265 99 345 6789', balance:0, bets:3, active:false },
+    { name:'Thandiwe Chirwa', phone:'+265 88 456 7890', balance:45000, bets:22, active:true },
+    ...(state.user ? [{ name:state.user.name, phone:state.user.phone, balance:state.balance, bets:state.bets.length, active:true }] : []),
+  ];
+
+  demoCustomers.forEach(c => {
+    const row = document.createElement('div');
+    row.className = 'ct-row';
+    row.innerHTML = `
+      <div style="font-weight:600;">${c.name}</div>
+      <div style="color:var(--kw-muted);font-size:12px;">${c.phone}</div>
+      <div style="color:var(--kw-gold);font-weight:700;">MWK ${c.balance.toLocaleString()}</div>
+      <div>${c.bets}</div>
+      <div><span class="status-pill ${c.active?'active':'inactive'}">${c.active?'Active':'Inactive'}</span></div>
+      <div><button class="action-btn">View</button></div>`;
+    rows.appendChild(row);
+  });
+
+  // Admin transactions
+  const adminTx = document.getElementById('admin-tx-list');
+  adminTx.innerHTML = '';
+  const allTx = [
+    { type:'dep', amount:5000, desc:'Deposit — Chisomo Banda', date:'26/03/2026 10:22', method:'Airtel Money' },
+    { type:'wit', amount:-3000, desc:'Withdrawal — Thandiwe Chirwa', date:'26/03/2026 09:45', method:'Mpamba' },
+    { type:'win', amount:15000, desc:'Winnings — Takondwa Phiri · Ticket KB200123', date:'26/03/2026 08:30', method:'Account' },
+    { type:'dep', amount:10000, desc:'Deposit — Mphatso Mwale', date:'25/03/2026 22:10', method:'Paychangu' },
+    ...state.transactions,
+  ];
+  allTx.slice(0,10).forEach(tx => {
+    const item = document.createElement('div');
+    item.className = 'tx-item';
+    const isPos = tx.amount > 0;
+    const typeIcon = { dep:'💰', wit:'📤', bet:'🎟', win:'🏆' }[tx.type] || '💳';
+    const typeClass = { dep:'dep', wit:'wit', bet:'wit', win:'win' }[tx.type] || 'dep';
+    item.innerHTML = `
+      <div class="tx-info">
+        <div class="tx-icon ${typeClass}">${typeIcon}</div>
+        <div class="tx-detail">
+          <div class="tx-desc">${tx.desc}</div>
+          <div class="tx-date">${tx.date} · ${tx.method}</div>
+        </div>
+      </div>
+      <div class="tx-amount ${isPos?'pos':'neg'}">${isPos?'+':''}MWK ${Math.abs(tx.amount).toLocaleString()}</div>`;
+    adminTx.appendChild(item);
+  });
+}
+
+// ============ UTILS ============
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.className='toast', 3000);
+}
+
+// init payment method hint
+selectPayMethod('airtel');
+
+// Live match score ticker (demo)
+setInterval(() => {
+  liveMatches.forEach(m => {
+    if (m.sport === 'football' && Math.random() < 0.05) {
+      const side = Math.random() < 0.5 ? 'h' : 'a';
+      m.score[side]++;
+    }
+  });
+  if (state.currentSection === 'live') renderLiveMatches();
+}, 8000);
+</script>
+</body>
+</html>
